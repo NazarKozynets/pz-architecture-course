@@ -14,7 +14,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { ApiEndpointResponses } from '../../common/decorators/response.decorator';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe';
-import { RoomResponseDto } from './dto/room-response.dto';
+import { RoomResponseDto, RoomsListResponseDto } from './dto/room-response.dto';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -43,6 +43,7 @@ export class RoomsController {
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список номерів успішно отримано',
+    successType: RoomsListResponseDto,
   })
   findAll() {
     return this.roomsService.findAll();
@@ -61,6 +62,7 @@ export class RoomsController {
     successDescription: 'Номер успішно знайдено',
     badRequestMessage: 'Некоректний ID номера',
     notFoundMessage: 'Номер не знайдено',
+    successType: RoomResponseDto,
   })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.roomsService.findOne(id);
@@ -84,6 +86,7 @@ export class RoomsController {
     badRequestMessage: 'Некоректні дані для оновлення номера',
     notFoundMessage: 'Номер не знайдено',
     conflictMessage: 'Конфлікт при оновленні номера',
+    successType: RoomResponseDto,
   })
   update(
     @Param('id', ParseObjectIdPipe) id: string,

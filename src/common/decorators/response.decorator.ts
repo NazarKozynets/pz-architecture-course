@@ -56,7 +56,7 @@ export function ApiEndpointResponses(options: ApiEndpointResponsesOptions) {
         allOf: [{ $ref: getSchemaPath(ErrorResponseDto) }],
         example: {
           statusCode: 400,
-          message: ['price must not be less than 0'],
+          message: ['price must not be greater than 0'],
           error: 'Bad Request',
         },
       },

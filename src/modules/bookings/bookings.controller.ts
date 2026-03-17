@@ -14,6 +14,10 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ApiEndpointResponses } from '../../common/decorators/response.decorator';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe';
+import {
+  BookingListResponseDto,
+  BookingResponseDto,
+} from './dto/response-booking.dto';
 
 @ApiTags('bookings')
 @Controller('bookings')
@@ -31,6 +35,7 @@ export class BookingsController {
     successDescription: 'Бронювання успішно створено',
     badRequestMessage: 'Некоректні дані для створення бронювання',
     conflictMessage: 'Конфлікт при створенні бронювання',
+    successType: BookingResponseDto,
   })
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingsService.create(createBookingDto);
@@ -41,6 +46,7 @@ export class BookingsController {
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список бронювань успішно отримано',
+    successType: BookingListResponseDto,
   })
   findAll() {
     return this.bookingsService.findAll();
@@ -59,6 +65,7 @@ export class BookingsController {
     successDescription: 'Бронювання успішно знайдено',
     badRequestMessage: 'Некоректний ID бронювання',
     notFoundMessage: 'Бронювання не знайдено',
+    successType: BookingResponseDto,
   })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.bookingsService.findOne(id);
@@ -82,6 +89,7 @@ export class BookingsController {
     badRequestMessage: 'Некоректні дані для оновлення бронювання',
     notFoundMessage: 'Бронювання не знайдено',
     conflictMessage: 'Конфлікт при оновленні бронювання',
+    successType: BookingResponseDto,
   })
   update(
     @Param('id', ParseObjectIdPipe) id: string,

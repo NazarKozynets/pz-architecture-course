@@ -6,6 +6,10 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { ApiEndpointResponses } from '../../common/decorators/response.decorator';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe';
+import {
+  ServiceListResponseDto,
+  ServiceResponseDto,
+} from './dto/response-service.dto';
 
 @ApiTags('services')
 @Controller('services')
@@ -23,6 +27,7 @@ export class ServicesController {
     successDescription: 'Послугу успішно створено',
     badRequestMessage: 'Некоректні дані для створення послуги',
     conflictMessage: 'Послуга з такими даними вже існує',
+    successType: ServiceResponseDto,
   })
   create(@Body() createServiceDto: CreateServiceDto) {
     return this.servicesService.create(createServiceDto);
@@ -33,6 +38,7 @@ export class ServicesController {
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список послуг успішно отримано',
+    successType: ServiceListResponseDto,
   })
   findAll() {
     return this.servicesService.findAll();
@@ -51,6 +57,7 @@ export class ServicesController {
     successDescription: 'Послугу успішно знайдено',
     badRequestMessage: 'Некоректний ID послуги',
     notFoundMessage: 'Послугу не знайдено',
+    successType: ServiceResponseDto,
   })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.servicesService.findOne(id);
@@ -74,6 +81,7 @@ export class ServicesController {
     badRequestMessage: 'Некоректні дані для оновлення послуги',
     notFoundMessage: 'Послугу не знайдено',
     conflictMessage: 'Конфлікт при оновленні послуги',
+    successType: ServiceResponseDto,
   })
   update(
     @Param('id', ParseObjectIdPipe) id: string,

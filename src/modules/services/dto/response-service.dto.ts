@@ -19,3 +19,8 @@ export class ServiceResponseDto {
   @ApiProperty({ example: '2026-03-16T12:10:00.000Z' })
   updatedAt: string;
 }
+
+export class ServiceListResponseDto {
+  @ApiProperty({ type: ServiceResponseDto })
+  services: ServiceResponseDto[];
+}

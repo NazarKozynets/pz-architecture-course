@@ -19,6 +19,7 @@ import {
   PaymentsListResponseDto,
 } from './dto/response-payment.dto';
 import { DeleteResponseDto } from './dto/delete-payment.dto';
+import { UpdateRoomDto } from '../rooms/dto/update-room.dto';
 
 @ApiTags('payments')
 @Controller('payments')
@@ -70,6 +71,33 @@ export class PaymentsController {
   })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.paymentsService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Оновити платіж за ID' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    example: '65f1c9a2e4b0f123456789ab',
+    description: 'MongoDB ObjectId платежу',
+  })
+  @ApiBody({
+    type: UpdatePaymentDto,
+    description: 'Дані для оновлення платежу',
+  })
+  @ApiEndpointResponses({
+    successStatus: 'ok',
+    successDescription: 'Платіж успішно оновлено',
+    badRequestMessage: 'Некоректні дані для оновлення платежу',
+    notFoundMessage: 'Платіж не знайдено',
+    conflictMessage: 'Конфлікт при оновленні платежу',
+    successType: PaymentResponseDto,
+  })
+  update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updatePaymentDto: UpdatePaymentDto,
+  ) {
+    return this.paymentsService.update(id, updatePaymentDto);
   }
 
   @Delete(':id')

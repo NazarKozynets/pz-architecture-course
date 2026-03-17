@@ -28,3 +28,8 @@ export class RoomResponseDto {
   @ApiProperty({ example: '2026-03-16T12:10:00.000Z' })
   updatedAt: string;
 }
+
+export class RoomsListResponseDto {
+  @ApiProperty({ type: RoomResponseDto, isArray: true })
+  rooms: RoomResponseDto[];
+}

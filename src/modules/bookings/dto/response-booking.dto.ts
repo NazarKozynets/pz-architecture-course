@@ -31,3 +31,8 @@ export class BookingResponseDto {
   @ApiProperty({ example: '2026-03-16T12:10:00.000Z' })
   updatedAt: string;
 }
+
+export class BookingListResponseDto {
+  @ApiProperty({ type: BookingResponseDto, isArray: true })
+  bookings: BookingResponseDto[];
+}

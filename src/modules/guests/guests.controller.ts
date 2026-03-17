@@ -14,6 +14,10 @@ import { CreateGuestDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
 import { ApiEndpointResponses } from '../../common/decorators/response.decorator';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe';
+import {
+  GuestListResponseDto,
+  GuestResponseDto,
+} from './dto/response-guest.dto';
 
 @ApiTags('guests')
 @Controller('guests')
@@ -31,6 +35,7 @@ export class GuestsController {
     successDescription: 'Гостя успішно створено',
     badRequestMessage: 'Некоректні дані для створення гостя',
     conflictMessage: 'Гість з такими даними вже існує',
+    successType: GuestResponseDto,
   })
   create(@Body() createGuestDto: CreateGuestDto) {
     return this.guestsService.create(createGuestDto);
@@ -41,6 +46,7 @@ export class GuestsController {
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список гостей успішно отримано',
+    successType: GuestListResponseDto,
   })
   findAll() {
     return this.guestsService.findAll();
@@ -59,6 +65,7 @@ export class GuestsController {
     successDescription: 'Гостя успішно знайдено',
     badRequestMessage: 'Некоректний ID гостя',
     notFoundMessage: 'Гостя не знайдено',
+    successType: GuestResponseDto,
   })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.guestsService.findOne(id);
@@ -82,6 +89,7 @@ export class GuestsController {
     badRequestMessage: 'Некоректні дані для оновлення гостя',
     notFoundMessage: 'Гостя не знайдено',
     conflictMessage: 'Конфлікт при оновленні гостя',
+    successType: GuestResponseDto,
   })
   update(
     @Param('id', ParseObjectIdPipe) id: string,

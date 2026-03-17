@@ -22,3 +22,8 @@ export class GuestResponseDto {
   @ApiProperty({ example: '2026-03-16T12:10:00.000Z' })
   updatedAt: string;
 }
+
+export class GuestListResponseDto {
+  @ApiProperty({ type: GuestResponseDto, isArray: true })
+  guests: GuestResponseDto[];
+}

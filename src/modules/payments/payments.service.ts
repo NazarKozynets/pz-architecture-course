@@ -34,6 +34,23 @@ export class PaymentsService {
     return payment;
   }
 
+  async update(id: string, updatePaymentDto: UpdatePaymentDto) {
+    const room = await this.paymentModel.findByIdAndUpdate(
+      id,
+      updatePaymentDto,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!room) {
+      throw new NotFoundException('Платіж не знайдено');
+    }
+
+    return room;
+  }
+
   async remove(id: string) {
     const payment = await this.paymentModel.findByIdAndDelete(id);
 
