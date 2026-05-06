@@ -1,5 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
@@ -10,18 +19,22 @@ import {
   ServiceListResponseDto,
   ServiceResponseDto,
 } from './dto/response-service.dto';
+import { Public } from '../../common/decorators/public.decorator';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRole } from '../../database/schemas/user.schema';
 
 @ApiTags('services')
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @Post()
-  @ApiOperation({ summary: 'Створити нову послугу' })
-  @ApiBody({
-    type: CreateServiceDto,
-    description: 'Дані для створення послуги',
-  })
+  @ApiOperation({ summary: 'Створити нову послугу (тільки адміністратор)' })
+  @ApiBody({ type: CreateServiceDto, description: 'Дані для створення послуги' })
   @ApiEndpointResponses({
     successStatus: 'created',
     successDescription: 'Послугу успішно створено',
@@ -33,8 +46,9 @@ export class ServicesController {
     return this.servicesService.create(createServiceDto);
   }
 
+  @Public()
   @Get()
-  @ApiOperation({ summary: 'Отримати список усіх послуг' })
+  @ApiOperation({ summary: 'Отримати список усіх послуг (публічний)' })
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список послуг успішно отримано',
@@ -44,8 +58,9 @@ export class ServicesController {
     return this.servicesService.findAll();
   }
 
+  @Public()
   @Get(':id')
-  @ApiOperation({ summary: 'Отримати послугу за ID' })
+  @ApiOperation({ summary: 'Отримати послугу за ID (публічний)' })
   @ApiParam({
     name: 'id',
     type: String,
@@ -63,18 +78,18 @@ export class ServicesController {
     return this.servicesService.findOne(id);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @Patch(':id')
-  @ApiOperation({ summary: 'Оновити послугу за ID' })
+  @ApiOperation({ summary: 'Оновити послугу за ID (тільки адміністратор)' })
   @ApiParam({
     name: 'id',
     type: String,
     example: '65f1c9a2e4b0f123456789ab',
     description: 'MongoDB ObjectId послуги',
   })
-  @ApiBody({
-    type: UpdateServiceDto,
-    description: 'Дані для оновлення послуги',
-  })
+  @ApiBody({ type: UpdateServiceDto, description: 'Дані для оновлення послуги' })
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Послугу успішно оновлено',
@@ -90,8 +105,11 @@ export class ServicesController {
     return this.servicesService.update(id, updateServiceDto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiBearerAuth()
   @Delete(':id')
-  @ApiOperation({ summary: 'Видалити послугу за ID' })
+  @ApiOperation({ summary: 'Видалити послугу за ID (тільки адміністратор)' })
   @ApiParam({
     name: 'id',
     type: String,

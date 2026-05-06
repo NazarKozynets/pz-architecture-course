@@ -8,6 +8,7 @@ import {
   HotelServiceSchema,
 } from './schemas/hotel-service.schema';
 import { Booking, BookingSchema } from './schemas/booking.schema';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Global()
 @Module({
@@ -18,6 +19,7 @@ import { Booking, BookingSchema } from './schemas/booking.schema';
       { name: Guest.name, schema: GuestSchema },
       { name: HotelService.name, schema: HotelServiceSchema },
       { name: Booking.name, schema: BookingSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   exports: [MongooseModule],

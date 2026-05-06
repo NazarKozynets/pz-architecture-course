@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsIn,
+  IsMongoId,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,6 +10,10 @@ import {
 } from 'class-validator';
 
 export class CreatePaymentDto {
+  @ApiProperty({ example: '65f1c9a2e4b0f123456789ab', description: 'ID бронювання' })
+  @IsMongoId()
+  bookingId: string;
+
   @ApiProperty({
     example: 2500,
     description: 'Сума платежу',

@@ -3,6 +3,14 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type BookingDocument = HydratedDocument<Booking>;
 
+export enum BookingStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  CHECKED_IN = 'checked_in',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
+}
+
 @Schema({
   timestamps: true,
   versionKey: false,
@@ -10,12 +18,14 @@ export type BookingDocument = HydratedDocument<Booking>;
 export class Booking {
   @Prop({
     type: Types.ObjectId,
+    ref: 'Guest',
     required: true,
   })
   guestId: Types.ObjectId;
 
   @Prop({
     type: Types.ObjectId,
+    ref: 'Room',
     required: true,
   })
   roomId: Types.ObjectId;
@@ -32,15 +42,22 @@ export class Booking {
 
   @Prop({
     required: true,
-    enum: ['pending', 'confirmed', 'cancelled', 'completed'],
-    default: 'pending',
+    enum: BookingStatus,
+    default: BookingStatus.PENDING,
   })
   status: string;
 
   @Prop({
     min: 0,
+    default: 0,
   })
-  totalPrice?: number;
+  totalPrice: number;
+
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: 'HotelService' }],
+    default: [],
+  })
+  services: Types.ObjectId[];
 }
 
 export const BookingSchema = SchemaFactory.createForClass(Booking);

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type PaymentDocument = HydratedDocument<Payment>;
 
@@ -8,6 +8,13 @@ export type PaymentDocument = HydratedDocument<Payment>;
   versionKey: false,
 })
 export class Payment {
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Booking',
+    required: true,
+  })
+  bookingId: Types.ObjectId;
+
   @Prop({
     required: true,
     min: 1,

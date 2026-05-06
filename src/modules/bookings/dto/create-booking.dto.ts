@@ -39,10 +39,10 @@ export class CreateBookingDto {
 
   @ApiProperty({
     example: 'pending',
-    enum: ['pending', 'confirmed', 'cancelled', 'completed'],
+    enum: ['pending', 'confirmed', 'checked_in', 'cancelled', 'completed'],
     description: 'Статус бронювання',
   })
-  @IsIn(['pending', 'confirmed', 'cancelled', 'completed'])
+  @IsIn(['pending', 'confirmed', 'checked_in', 'cancelled', 'completed'])
   status: string;
 
   @ApiProperty({

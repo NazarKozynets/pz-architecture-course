@@ -6,8 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { GuestsService } from './guests.service';
 import { CreateGuestDto } from './dto/create-guest.dto';
@@ -18,18 +19,21 @@ import {
   GuestListResponseDto,
   GuestResponseDto,
 } from './dto/response-guest.dto';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRole } from '../../database/schemas/user.schema';
 
+@ApiBearerAuth()
 @ApiTags('guests')
 @Controller('guests')
 export class GuestsController {
   constructor(private readonly guestsService: GuestsService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Post()
-  @ApiOperation({ summary: 'Створити нового гостя' })
-  @ApiBody({
-    type: CreateGuestDto,
-    description: 'Дані для створення гостя',
-  })
+  @ApiOperation({ summary: 'Зареєструвати нового гостя (тільки адміністратор)' })
+  @ApiBody({ type: CreateGuestDto, description: 'Дані для створення гостя' })
   @ApiEndpointResponses({
     successStatus: 'created',
     successDescription: 'Гостя успішно створено',
@@ -41,8 +45,10 @@ export class GuestsController {
     return this.guestsService.create(createGuestDto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Get()
-  @ApiOperation({ summary: 'Отримати список усіх гостей' })
+  @ApiOperation({ summary: 'Отримати список усіх гостей (тільки адміністратор)' })
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Список гостей успішно отримано',
@@ -71,18 +77,17 @@ export class GuestsController {
     return this.guestsService.findOne(id);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Patch(':id')
-  @ApiOperation({ summary: 'Оновити гостя за ID' })
+  @ApiOperation({ summary: 'Оновити гостя за ID (тільки адміністратор)' })
   @ApiParam({
     name: 'id',
     type: String,
     example: '65f1c9a2e4b0f123456789ab',
     description: 'MongoDB ObjectId гостя',
   })
-  @ApiBody({
-    type: UpdateGuestDto,
-    description: 'Дані для оновлення гостя',
-  })
+  @ApiBody({ type: UpdateGuestDto, description: 'Дані для оновлення гостя' })
   @ApiEndpointResponses({
     successStatus: 'ok',
     successDescription: 'Гостя успішно оновлено',
@@ -98,8 +103,10 @@ export class GuestsController {
     return this.guestsService.update(id, updateGuestDto);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
-  @ApiOperation({ summary: 'Видалити гостя за ID' })
+  @ApiOperation({ summary: 'Видалити гостя за ID (тільки адміністратор)' })
   @ApiParam({
     name: 'id',
     type: String,
